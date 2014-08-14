@@ -16,7 +16,8 @@ public class StairClimb {
 		 * 3. 위와 같은 방법으로 확장되면서..전체의 현재 계단 위치를 확인해서 10이면 종료.
 		 * 4. 모든 climber가 종료될 때까지 진행
 		 * 
-		 * * 현재 오류 : 마지막에 1계단 남으면 무조건 1, 2, 3 경우의 수만큼 나오는데 1계단, 혹은 2계단 남으면 남은 계단수가 경우의 수가 된다
+		 * 현재 오류 : 마지막에 1계단 남으면 무조건 1, 2, 3 경우의 수만큼 나오는데 1계단, 혹은 2계단 남으면 남은 계단수가 경우의 수가 된다
+		 * --> 정확히 10만 완료작업으로 분류한다. (3331 이나 3332 나 결국 3331과 같은거다 마지막이 1계단 남으니까)
 		 */
 		
 		//Math.ceil(a)
@@ -27,7 +28,11 @@ public class StairClimb {
 		while(!climbers.isEmpty()) {
 			Climber c = climbers.poll();
 			if(isFinishClimbStair(c, stair)) {
-				finishClimbers.add(c);
+				if(c.getCurrentStep() == stair.getStairCnt()) {
+					finishClimbers.add(c);	
+				} else {
+					System.out.println("FALSE : " + c.getStairStep());
+				}
 				continue;
 			}
 			climbers.addAll(climbStair(c));
@@ -54,8 +59,7 @@ public class StairClimb {
 	
 	public static void main(String[] args) {
 		StairClimb sc = new StairClimb();
-		Climber climber = new Climber(3);
-		LinkedList<Climber> climbers = sc.climb(new Stair(5), climber);
+		LinkedList<Climber> climbers = sc.climb(new Stair(10), new Climber(3));
 		System.out.println("SIZE : " + climbers.size());
 		
 		Climber[] arrays = new Climber[climbers.size()];
@@ -78,6 +82,8 @@ public class StairClimb {
 		}
 		System.out.println(arrays.length);
 		System.out.println(i);
+		
+		
 	}
 	
 }
